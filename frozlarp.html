@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FrozLarp — Plan interno</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #F6F7F9;
+    --surface: #FFFFFF;
+    --ink: #1B2430;
+    --ink-soft: #4A5568;
+    --line: #DFE4EA;
+    --primary: #1F5FBF;
+    --primary-deep: #163F82;
+    --amber: #D98A2B;
+    --amber-soft: #FBEEDC;
+    --radius-map: 3px;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter', -apple-system, sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    color:var(--ink);
+    line-height:1.12;
+    margin:0;
+    letter-spacing:-0.01em;
+  }
+  p{margin:0;}
+  a{color:inherit;}
+  img{max-width:100%;display:block;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 28px;}
+  section{padding:96px 0;}
+  @media(max-width:640px){ section{padding:64px 0;} .wrap{padding:0 20px;} }
+
+  /* ---------- topographic texture used sparingly as brand motif ---------- */
+  .topo{
+    background-image:
+      repeating-radial-gradient(circle at 18% 30%, rgba(31,95,191,0.05) 0, rgba(31,95,191,0.05) 1px, transparent 1px, transparent 34px),
+      repeating-radial-gradient(circle at 82% 70%, rgba(217,138,43,0.06) 0, rgba(217,138,43,0.06) 1px, transparent 1px, transparent 46px);
+  }
+
+  /* ---------- header ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(246,247,249,0.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:18px 28px;max-width:1080px;margin:0 auto;}
+  .brand{display:flex;align-items:center;gap:10px;font-family:'Fraunces',serif;font-weight:600;font-size:1.15rem;}
+  .brand-mark{width:30px;height:30px;flex:none;}
+  .navlinks{display:flex;gap:28px;font-size:0.92rem;color:var(--ink-soft);}
+  .navlinks a{text-decoration:none;transition:color .15s;}
+  .navlinks a:hover{color:var(--primary);}
+  .nav-cta{
+    display:inline-flex;align-items:center;gap:8px;
+    background:var(--primary);color:#fff;text-decoration:none;
+    padding:9px 16px;border-radius:8px;font-size:0.88rem;font-weight:600;
+    transition:background .15s;
+  }
+  .nav-cta:hover{background:var(--primary-deep);}
+  .menu-toggle{display:none;background:none;border:none;cursor:pointer;padding:4px;}
+  @media(max-width:760px){
+    .navlinks{display:none;}
+    .nav-cta span.long{display:none;}
+  }
+
+  /* ---------- hero ---------- */
+  .hero{padding:88px 0 72px;}
+  .hero-grid{display:grid;grid-template-columns:1.15fr 0.85fr;gap:56px;align-items:center;}
+  @media(max-width:860px){.hero-grid{grid-template-columns:1fr;}}
+  .eyebrow-line{display:flex;align-items:center;gap:10px;margin-bottom:22px;}
+  .eyebrow-line .dash{width:34px;height:2px;background:var(--amber);}
+  .eyebrow-line span{font-size:0.86rem;color:var(--ink-soft);}
+  .hero h1{font-size:clamp(2.3rem,4.4vw,3.6rem);max-width:14ch;}
+  .hero-lead{margin-top:22px;font-size:1.08rem;color:var(--ink-soft);max-width:46ch;}
+  .hero-actions{margin-top:34px;display:flex;gap:14px;flex-wrap:wrap;}
+  .btn-primary{
+    background:var(--primary);color:#fff;text-decoration:none;font-weight:600;
+    padding:13px 22px;border-radius:9px;font-size:0.95rem;display:inline-flex;align-items:center;gap:9px;
+    transition:transform .15s, background .15s;
+  }
+  .btn-primary:hover{background:var(--primary-deep);transform:translateY(-1px);}
+  .btn-ghost{
+    border:1px solid var(--line);color:var(--ink);text-decoration:none;font-weight:600;
+    padding:12px 20px;border-radius:9px;font-size:0.95rem;background:var(--surface);
+    transition:border-color .15s;
+  }
+  .btn-ghost:hover{border-color:var(--primary);}
+
+  .hero-panel{
+    background:var(--surface);border:1px solid var(--line);border-radius:14px;
+    padding:30px;position:relative;overflow:hidden;
+  }
+  .hero-panel::before{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(135deg, rgba(31,95,191,0.05), rgba(217,138,43,0.05));
+  }
+  .hero-panel-inner{position:relative;}
+  .hero-stat{display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--line);}
+  .hero-stat:last-child{border-bottom:none;}
+  .hero-stat dt{color:var(--ink-soft);font-size:0.88rem;}
+  .hero-stat dd{margin:0;font-weight:600;font-family:'Fraunces',serif;font-size:1.05rem;}
+
+  /* ---------- section heading pattern ---------- */
+  .sec-head{display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:end;margin-bottom:48px;}
+  .sec-head .idx{font-family:'Fraunces',serif;font-size:0.95rem;color:var(--amber);border:1px solid var(--amber);border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;flex:none;}
+  .sec-head h2{font-size:clamp(1.6rem,3vw,2.2rem);max-width:20ch;}
+  .sec-head p{color:var(--ink-soft);margin-top:8px;max-width:52ch;font-size:0.98rem;}
+  @media(max-width:600px){.sec-head{grid-template-columns:1fr;}}
+
+  /* ---------- idea section ---------- */
+  .idea-band{background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .idea-cols{display:grid;grid-template-columns:1fr 1fr;gap:48px;}
+  @media(max-width:760px){.idea-cols{grid-template-columns:1fr;}}
+  .idea-cols h3{font-size:1.2rem;margin-bottom:12px;}
+  .idea-cols p{color:var(--ink-soft);}
+  .world-card{
+    margin-top:28px;border:1px dashed var(--line);border-radius:12px;padding:22px;
+    background:linear-gradient(180deg, rgba(31,95,191,0.03), transparent);
+  }
+  .world-card p{font-size:0.93rem;}
+
+  /* ---------- roadmap / plan (real sequence -> timeline) ---------- */
+  .roadmap{position:relative;}
+  .roadmap-track{position:relative;padding-left:38px;}
+  .roadmap-track::before{
+    content:"";position:absolute;left:11px;top:6px;bottom:6px;width:2px;
+    background:linear-gradient(var(--primary), var(--amber));
+    opacity:0.35;
+  }
+  .step{position:relative;padding-bottom:44px;}
+  .step:last-child{padding-bottom:0;}
+  .step::before{
+    content:attr(data-n);
+    position:absolute;left:-38px;top:0;width:24px;height:24px;border-radius:50%;
+    background:var(--surface);border:2px solid var(--primary);color:var(--primary-deep);
+    font-family:'Fraunces',serif;font-size:0.78rem;font-weight:700;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .step h3{font-size:1.12rem;margin-bottom:6px;}
+  .step p{color:var(--ink-soft);font-size:0.95rem;max-width:58ch;}
+  .step .tag{display:inline-block;margin-top:10px;font-size:0.78rem;color:var(--amber);background:var(--amber-soft);padding:3px 10px;border-radius:6px;}
+
+  /* ---------- ventajas / retos ---------- */
+  .facing{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--surface);}
+  @media(max-width:760px){.facing{grid-template-columns:1fr;}}
+  .facing-col{padding:34px;}
+  .facing-col.strengths{background:linear-gradient(180deg, rgba(31,95,191,0.045), transparent);border-right:1px solid var(--line);}
+  @media(max-width:760px){.facing-col.strengths{border-right:none;border-bottom:1px solid var(--line);}}
+  .facing-col h3{font-size:1.15rem;margin-bottom:18px;}
+  .facing-item{padding:16px 0;border-top:1px solid var(--line);}
+  .facing-item:first-of-type{border-top:none;}
+  .facing-item .label{font-weight:600;font-size:0.96rem;}
+  .facing-item .desc{color:var(--ink-soft);font-size:0.9rem;margin-top:4px;}
+  .facing-item .fix{margin-top:8px;font-size:0.88rem;color:var(--primary-deep);}
+  .facing-item .fix b{font-weight:600;}
+
+  /* ---------- team ---------- */
+  .team-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
+  @media(max-width:860px){.team-grid{grid-template-columns:repeat(3,1fr);}}
+  @media(max-width:600px){.team-grid{grid-template-columns:repeat(2,1fr);}}
+  .card-member{
+    background:var(--surface);border:1px solid var(--line);border-radius:12px;
+    padding:20px 16px;text-align:left;transition:border-color .15s, transform .15s;
+  }
+  .card-member:hover{border-color:var(--primary);transform:translateY(-2px);}
+  .card-member.lead{
+    border-color:var(--amber);
+    background:linear-gradient(180deg, var(--amber-soft), var(--surface));
+    grid-column:span 2;
+  }
+  @media(max-width:600px){.card-member.lead{grid-column:span 2;}}
+  .avatar{
+    width:44px;height:44px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Fraunces',serif;font-weight:600;color:#fff;
+    background:var(--primary); margin-bottom:14px; font-size:1rem;
+  }
+  .card-member.lead .avatar{background:var(--amber);}
+  .card-member .name{font-weight:600;font-size:0.98rem;}
+  .card-member .role{color:var(--ink-soft);font-size:0.82rem;margin-top:3px;}
+  .lead-badge{display:inline-block;margin-top:8px;font-size:0.72rem;color:#8a5a12;background:#fff;border:1px solid var(--amber);padding:2px 8px;border-radius:5px;}
+
+  /* ---------- gallery / apoyo visual ---------- */
+  .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+  @media(max-width:700px){.gallery{grid-template-columns:1fr 1fr;}}
+  .gallery-tile{
+    aspect-ratio:4/3;border-radius:10px;border:1px dashed var(--line);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+    background:var(--surface);color:var(--ink-soft);font-size:0.82rem;text-align:center;padding:12px;
+  }
+  .gallery-tile svg{opacity:0.55;}
+
+  /* ---------- contact ---------- */
+  .contact{
+    background:var(--ink);color:#fff;border-radius:20px;padding:56px 44px;
+    display:grid;grid-template-columns:1.2fr 0.8fr;gap:36px;align-items:center;
+  }
+  @media(max-width:760px){.contact{grid-template-columns:1fr;padding:40px 26px;}}
+  .contact h2{color:#fff;font-size:clamp(1.5rem,3vw,2rem);max-width:16ch;}
+  .contact p{color:#B9C2CE;margin-top:14px;max-width:44ch;font-size:0.97rem;}
+  .contact-card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.14);border-radius:14px;padding:26px;}
+  .contact-card .who{display:flex;align-items:center;gap:12px;margin-bottom:18px;}
+  .contact-card .who .avatar{background:var(--amber);}
+  .contact-card .who .name{font-weight:600;}
+  .contact-card .who .role{color:#B9C2CE;font-size:0.82rem;}
+  .wa-btn{
+    width:100%;display:flex;align-items:center;justify-content:center;gap:10px;
+    background:#25D366;color:#0a2e1a;text-decoration:none;font-weight:700;
+    padding:14px 18px;border-radius:10px;font-size:0.96rem;
+    transition:transform .15s, box-shadow .15s;
+  }
+  .wa-btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(37,211,102,0.35);}
+  .contact-card .note{color:#8b95a3;font-size:0.78rem;margin-top:12px;text-align:center;}
+
+  /* ---------- floating whatsapp ---------- */
+  .fab{
+    position:fixed;bottom:22px;right:22px;z-index:60;
+    background:#25D366;color:#fff;width:58px;height:58px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 8px 22px rgba(0,0,0,0.22);text-decoration:none;
+    transition:transform .15s;
+  }
+  .fab:hover{transform:scale(1.06);}
+
+  footer{border-top:1px solid var(--line);padding:32px 0;color:var(--ink-soft);font-size:0.85rem;}
+  .footer-row{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 32 32" fill="none">
+        <path d="M16 2 L29 9 V23 L16 30 L3 23 V9 Z" stroke="#1F5FBF" stroke-width="2"/>
+        <path d="M16 2 V30 M3 9 L29 23 M29 9 L3 23" stroke="#D98A2B" stroke-width="1"/>
+      </svg>
+      FrozLarp
+    </div>
+    <nav class="navlinks">
+      <a href="#idea">La idea</a>
+      <a href="#plan">Plan</a>
+      <a href="#retos">Retos y fortalezas</a>
+      <a href="#equipo">Equipo</a>
+    </nav>
+    <a class="nav-cta" href="https://wa.me/524495370264?text=Hola%20Logan%2C%20quiero%20platicar%20sobre%20FrozLarp" target="_blank" rel="noopener">
+      <span class="long">Hablar con Logan</span><span class="short">Contacto</span>
+    </a>
+  </div>
+</header>
+
+<section class="hero topo">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow-line"><span class="dash"></span><span>Documento interno · Solo para el equipo</span></div>
+      <h1>El plan completo de FrozLarp, en un solo lugar</h1>
+      <p class="hero-lead">Esta página reúne por qué existimos, cómo vamos a construirlo paso a paso, qué nos da ventaja, qué se nos va a atravesar y quién forma parte del equipo. Es el punto de referencia al que volvemos cuando hay dudas.</p>
+      <div class="hero-actions">
+        <a class="btn-primary" href="#plan">Ver el plan de desarrollo →</a>
+        <a class="btn-ghost" href="#equipo">Ver al equipo</a>
+      </div>
+    </div>
+    <div class="hero-panel">
+      <div class="hero-panel-inner">
+        <dl>
+          <div class="hero-stat"><dt>Integrantes activos</dt><dd>13</dd></div>
+          <div class="hero-stat"><dt>Fase actual</dt><dd>Diseño del universo y reglas</dd></div>
+          <div class="hero-stat"><dt>Líder de proyecto</dt><dd>Logan</dd></div>
+          <div class="hero-stat"><dt>Próximo hito</dt><dd>Evento piloto cerrado</dd></div>
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="idea-band" id="idea">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="idx">01</div>
+      <div>
+        <h2>La idea, en corto</h2>
+        <p>Lo que estamos construyendo y para quién.</p>
+      </div>
+    </div>
+    <div class="idea-cols">
+      <div>
+        <h3>Qué es FrozLarp</h3>
+        <p>Somos un equipo que diseña experiencias de rol en vivo (LARP): historias que la gente no ve desde afuera, sino que vive de principio a fin, metida en un personaje, dentro de un mundo con sus propias reglas. No es una obra de teatro ni un videojuego: es participar de verdad.</p>
+      </div>
+      <div>
+        <h3>Por qué ahora</h3>
+        <p>Hay una comunidad de rol y narrativa en crecimiento en México que hoy se organiza en foros y grupos sueltos, sin eventos producidos con cuidado. Queremos ser el equipo que profesionaliza esa experiencia: buena ambientación, reglas claras y una historia que valga la pena.</p>
+      </div>
+    </div>
+    <div class="world-card">
+      <p><strong>Editable:</strong> este espacio es para describir el universo o ambientación específica de FrozLarp (época, tono, reglas del mundo, tipo de personajes) una vez que el equipo lo cierre. Por ahora funciona como marcador de posición.</p>
+    </div>
+  </div>
+</section>
+
+<section id="plan">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="idx">02</div>
+      <div>
+        <h2>Cómo lo vamos a lograr</h2>
+        <p>El plan no es una idea suelta: es una secuencia de pasos, cada uno con una entrega concreta antes de pasar al siguiente.</p>
+      </div>
+    </div>
+    <div class="roadmap">
+      <div class="roadmap-track">
+        <div class="step" data-n="1">
+          <h3>Definir el universo y el sistema de reglas</h3>
+          <p>Cerrar la ambientación, el tono de la historia y las reglas de juego (qué puede y no puede hacer un personaje, cómo se resuelven los conflictos dentro del juego).</p>
+          <span class="tag">Entregable: documento de mundo y reglas</span>
+        </div>
+        <div class="step" data-n="2">
+          <h3>Formar al equipo narrativo</h3>
+          <p>Asignar quién narra, quién interpreta personajes no jugables (PNJs) y quién dirige la trama durante el evento en vivo.</p>
+          <span class="tag">Entregable: roles narrativos asignados</span>
+        </div>
+        <div class="step" data-n="3">
+          <h3>Diseñar el evento piloto</h3>
+          <p>Elegir locación, definir aforo, calcular presupuesto de ambientación, vestuario y props, y armar el guion general del primer evento.</p>
+          <span class="tag">Entregable: presupuesto y guion piloto</span>
+        </div>
+        <div class="step" data-n="4">
+          <h3>Probar con grupo cerrado</h3>
+          <p>Correr el piloto con jugadores de confianza, recoger retroalimentación honesta y ajustar reglas, ritmo y logística antes de abrir al público.</p>
+          <span class="tag">Entregable: reporte de retroalimentación</span>
+        </div>
+        <div class="step" data-n="5">
+          <h3>Lanzamiento público</h3>
+          <p>Abrir venta de lugares, comunicar la propuesta hacia afuera y correr el primer evento con jugadores externos al equipo.</p>
+          <span class="tag">Entregable: primer evento vendido</span>
+        </div>
+        <div class="step" data-n="6">
+          <h3>Construir comunidad recurrente</h3>
+          <p>Pasar de eventos sueltos a una campaña continua: temporadas, personajes que evolucionan de un evento a otro, jugadores que vuelven.</p>
+          <span class="tag">Entregable: calendario de temporada</span>
+        </div>
+        <div class="step" data-n="7">
+          <h3>Escalar</h3>
+          <p>Sumar nuevas sedes, alianzas con espacios y marcas afines, y una línea de producto secundaria (merchandising, talleres, eventos por encargo).</p>
+          <span class="tag">Entregable: plan de expansión</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="retos" class="idea-band">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="idx">03</div>
+      <div>
+        <h2>Lo que nos da ventaja y lo que hay que superar</h2>
+        <p>Ser honestos con esto ahora nos ahorra sorpresas después.</p>
+      </div>
+    </div>
+    <div class="facing">
+      <div class="facing-col strengths">
+        <h3>Fortalezas del equipo</h3>
+        <div class="facing-item">
+          <div class="label">Conocimiento real del mundo del rol</div>
+          <div class="desc">El equipo ya vive y entiende la cultura LARP, no la está aprendiendo desde cero.</div>
+        </div>
+        <div class="facing-item">
+          <div class="label">Costo de entrada bajo</div>
+          <div class="desc">No se necesita gran inversión inicial para probar el primer piloto con un grupo cerrado.</div>
+        </div>
+        <div class="facing-item">
+          <div class="label">Comunidad en crecimiento</div>
+          <div class="desc">El interés por experiencias inmersivas y participativas va al alza frente al entretenimiento pasivo.</div>
+        </div>
+        <div class="facing-item">
+          <div class="label">Libertad creativa</div>
+          <div class="desc">Al ser un equipo propio, las decisiones de historia y diseño se toman rápido, sin capas de aprobación.</div>
+        </div>
+      </div>
+      <div class="facing-col">
+        <h3>Adversidades a superar</h3>
+        <div class="facing-item">
+          <div class="label">Es un mercado poco conocido en México</div>
+          <div class="desc">Mucha gente no sabe qué es un LARP.</div>
+          <div class="fix"><b>Cómo lo resolvemos:</b> contenido educativo previo y un piloto de bajo riesgo para que la gente lo pruebe antes de comprometerse.</div>
+        </div>
+        <div class="facing-item">
+          <div class="label">Logística de locación y vestuario</div>
+          <div class="desc">Ambientar un espacio en vivo cuesta tiempo y dinero.</div>
+          <div class="fix"><b>Cómo lo resolvemos:</b> empezar con locaciones prestadas o de bajo costo y props reutilizables entre eventos.</div>
+        </div>
+        <div class="facing-item">
+          <div class="label">Seguridad de los participantes</div>
+          <div class="desc">Un evento en vivo con contacto físico o simulado necesita reglas claras de seguridad.</div>
+          <div class="fix"><b>Cómo lo resolvemos:</b> reglas de seguridad no negociables desde el documento de mundo, revisadas antes de cada evento.</div>
+        </div>
+        <div class="facing-item">
+          <div class="label">Financiamiento inicial</div>
+          <div class="desc">Los primeros eventos probablemente no se pagan solos.</div>
+          <div class="fix"><b>Cómo lo resolvemos:</b> piloto con aportación interna del equipo y venta de boletos desde el primer evento público.</div>
+        </div>
+        <div class="facing-item">
+          <div class="label">Retener jugadores</div>
+          <div class="desc">Un evento aislado no genera comunidad por sí solo.</div>
+          <div class="fix"><b>Cómo lo resolvemos:</b> personajes y tramas que continúan de un evento a otro, no historias cerradas.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="apoyo">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="idx">04</div>
+      <div>
+        <h2>Material de apoyo</h2>
+        <p>Espacio reservado para bocetos, referencias visuales y fotos de ambientación. Sustituye estos recuadros por las imágenes del equipo cuando estén listas.</p>
+      </div>
+    </div>
+    <div class="gallery">
+      <div class="gallery-tile">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 17l5-5 4 4 5-6 4 5"/><circle cx="7" cy="7" r="2"/></svg>
+        Referencia de ambientación
+      </div>
+      <div class="gallery-tile">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+        Boceto de mapa del evento
+      </div>
+      <div class="gallery-tile">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="8" r="3"/><path d="M6 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
+        Diseño de vestuario / personaje
+      </div>
+      <div class="gallery-tile">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="4" width="18" height="14" rx="1"/><path d="M3 15l4-4 4 3 5-5 5 4"/></svg>
+        Fotos de locación
+      </div>
+      <div class="gallery-tile">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 3v3M12 18v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M3 12h3M18 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>
+        Moodboard de tono / historia
+      </div>
+      <div class="gallery-tile">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 19V5a1 1 0 011-1h11l4 4v11a1 1 0 01-1 1H5a1 1 0 01-1-1z"/><path d="M9 9h6M9 13h6"/></svg>
+        Ficha de personaje / props
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="equipo" class="idea-band">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="idx">05</div>
+      <div>
+        <h2>El equipo</h2>
+        <p>Trece personas construyendo esto. Roles de referencia — se ajustan conforme avanza el plan.</p>
+      </div>
+    </div>
+    <div class="team-grid" id="teamGrid"></div>
+  </div>
+</section>
+
+<section id="contacto">
+  <div class="wrap">
+    <div class="contact">
+      <div>
+        <h2>¿Dudas, ideas o algo que resolver?</h2>
+        <p>Cualquier miembro del equipo puede escribirle directo a Logan por WhatsApp. Es la vía más rápida para destrabar decisiones del plan.</p>
+      </div>
+      <div class="contact-card">
+        <div class="who">
+          <div class="avatar">L</div>
+          <div>
+            <div class="name">Logan</div>
+            <div class="role">Líder de proyecto — FrozLarp</div>
+          </div>
+        </div>
+        <a class="wa-btn" href="https://wa.me/524495370264?text=Hola%20Logan%2C%20soy%20parte%20del%20equipo%20FrozLarp%20y%20quiero%20platicar%20sobre%20el%20plan" target="_blank" rel="noopener">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.39 1.26 4.81L2 22l5.42-1.34a9.9 9.9 0 004.62 1.15h.01c5.46 0 9.91-4.45 9.91-9.9 0-2.65-1.03-5.13-2.9-7-1.87-1.87-4.35-2.91-7.02-2.91zm0 18.06h-.01a8.17 8.17 0 01-4.17-1.14l-.3-.18-3.11.82.83-3.03-.2-.31a8.2 8.2 0 01-1.25-4.31c0-4.52 3.68-8.2 8.21-8.2 2.19 0 4.25.86 5.8 2.4a8.14 8.14 0 012.4 5.8c0 4.53-3.68 8.15-8.2 8.15zm4.49-6.14c-.25-.12-1.46-.72-1.68-.8-.23-.08-.39-.12-.56.13-.16.24-.64.8-.78.96-.14.17-.29.19-.53.06-.25-.12-1.04-.38-1.98-1.22-.73-.65-1.22-1.46-1.37-1.7-.14-.25-.02-.38.11-.5.11-.11.25-.29.37-.43.12-.15.16-.25.25-.42.08-.16.04-.31-.02-.43-.06-.12-.56-1.36-.77-1.86-.2-.49-.41-.42-.56-.43-.14-.01-.31-.01-.47-.01-.16 0-.43.06-.66.31-.23.24-.86.85-.86 2.06 0 1.22.88 2.4 1 2.56.12.17 1.74 2.65 4.21 3.72.59.25 1.05.4 1.41.52.59.19 1.13.16 1.55.1.47-.07 1.46-.6 1.67-1.17.2-.58.2-1.08.14-1.18-.06-.1-.22-.16-.47-.28z"/></svg>
+          Hablar con Logan por WhatsApp
+        </a>
+        <div class="note">+52 449 537 0264 · abre en WhatsApp</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-row">
+    <span>FrozLarp — documento interno del equipo</span>
+    <span>13 miembros · líder de proyecto: Logan</span>
+  </div>
+</footer>
+
+<a class="fab" href="https://wa.me/524495370264?text=Hola%20Logan" target="_blank" rel="noopener" aria-label="Hablar con Logan por WhatsApp">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="#fff"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.39 1.26 4.81L2 22l5.42-1.34a9.9 9.9 0 004.62 1.15h.01c5.46 0 9.91-4.45 9.91-9.9 0-2.65-1.03-5.13-2.9-7-1.87-1.87-4.35-2.91-7.02-2.91zm0 18.06h-.01a8.17 8.17 0 01-4.17-1.14l-.3-.18-3.11.82.83-3.03-.2-.31a8.2 8.2 0 01-1.25-4.31c0-4.52 3.68-8.2 8.21-8.2 2.19 0 4.25.86 5.8 2.4a8.14 8.14 0 012.4 5.8c0 4.53-3.68 8.15-8.2 8.15z"/></svg>
+</a>
+
+<script>
+  const team = [
+    { name:"Logan", role:"Líder de proyecto", lead:true },
+    { name:"Beto", role:"Narrativa" },
+    { name:"Ivan", role:"Producción de eventos" },
+    { name:"Poncho", role:"Ambientación y locación" },
+    { name:"Said", role:"Personajes no jugables" },
+    { name:"Diego", role:"Diseño de reglas" },
+    { name:"Erik", role:"Vestuario y props" },
+    { name:"Romo", role:"Logística" },
+    { name:"Pablo", role:"Comunidad y jugadores" },
+    { name:"Mauricio", role:"Finanzas" },
+    { name:"Milo", role:"Redes y difusión" },
+    { name:"Andre's", role:"Sonido y ambientación" },
+    { name:"Luka", role:"Apoyo general" },
+  ];
+
+  const grid = document.getElementById('teamGrid');
+  team.forEach(m => {
+    const card = document.createElement('div');
+    card.className = 'card-member' + (m.lead ? ' lead' : '');
+    const initial = m.name.replace("'", "").charAt(0).toUpperCase();
+    card.innerHTML = `
+      <div class="avatar">${initial}</div>
+      <div class="name">${m.name}</div>
+      <div class="role">${m.role}</div>
+      ${m.lead ? '<span class="lead-badge">Líder</span>' : ''}
+    `;
+    grid.appendChild(card);
+  });
+</script>
+
+</body>
+</html>
